@@ -3,10 +3,8 @@ using Discord.Webhook;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace WebHookTest
 {
@@ -32,7 +30,10 @@ namespace WebHookTest
                 Date = DateTime.Parse(data.Value<string>("timestamp"));
                 RevId = data.Value<int>("revid");
                 OldRevId = data.Value<int>("old_revid");
+
+                Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7}", User, Title, Comment, Page, Type, Date.ToUniversalTime(), RevId, OldRevId);
             }
+            
         }
 
         static void Main(string[] args)
@@ -49,7 +50,7 @@ namespace WebHookTest
                 using (WebClient client = new WebClient())
                 {
                     List<Change> changes = new List<Change>();
-                    string queryUrl = $"https://politiwiki.fr/w/api.php?action=query&list=recentchanges&rcprop=ids|title|user|comment|timestamp&rclimit=50&format=json";
+                    string queryUrl = $"https://politiwiki.fr/w/api.php?action=query&list=recentchanges&rcprop=ids|title|user|comment|timestamp&rclimit=10&format=json";
                     string json = client.DownloadString(queryUrl);
                     JObject jsonObject = JObject.Parse(json);
                     foreach (var change in jsonObject["query"]["recentchanges"])
@@ -78,13 +79,17 @@ namespace WebHookTest
                 StringBuilder messageBuilder = new StringBuilder();
                 messageBuilder.AppendLine(String.Format("**Contributeur·ice**: {0}", data.User));
                 messageBuilder.AppendLine(String.Format("**Page**: {0}", String.Format("[{0}](https://politiwiki.fr/wiki/{1})", data.Title, data.Title.Replace(' ', '_'))));
-                messageBuilder.AppendLine(String.Format("**Modification**: {0}", String.IsNullOrEmpty(data.Comment) ? "?" : data.Comment));
+                messageBuilder.AppendLine(String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment) ? "?" : data.Comment));
 
                 if (data.Type == "edit")
-                    messageBuilder.AppendLine(String.Format("**Diff**: {0}", String.Format("[Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId))));
+                    messageBuilder.AppendLine(String.Format("**Modification**: {0}", String.Format("[Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId))));
 
                 messageBuilder.AppendLine(String.Format("**Date**: {0}", data.Date.ToString("MM/dd/yyyy HH:mm:ss")));
 
+                var content = new EmbedFieldBuilder()
+                        .WithName("Description")
+                        .WithValue(messageBuilder.ToString())
+                        .WithIsInline(inline);
 
                 var footer = new EmbedFooterBuilder()
                         .WithText("Merci pour ton travail !")
@@ -92,6 +97,7 @@ namespace WebHookTest
 
                 var builder = new EmbedBuilder()
                         .WithAuthor(BuildTitle(data))
+                        .AddField(content)
                         .WithFooter(footer)
                         .WithColor(data.Type == "log" ? Color.LightOrange : Color.Green);
 
@@ -185,10 +191,12 @@ namespace WebHookTest
         }
 
         public void SendEmbeds(IEnumerable<Embed> embedsList)
-        {           
+        {
+            Console.WriteLine("Sending messages");
             foreach(var embed in embedsList)
             using (var client = new DiscordWebhookClient("https://discord.com/api/webhooks/1086991179004006550/R5mvOdDG0qQHKsG57J7aLzVm2C0TzSU08-EETfYeRxaUNp03F_mdOVL_vlS_v3yEvzbw"))
             {
+                Console.Write(".");
                 client.SendMessageAsync(text: "Nouveau changement sur politiwiki !", embeds: new[] { embed }).Wait();
             }
         }
