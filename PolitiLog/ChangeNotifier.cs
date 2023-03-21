@@ -45,7 +45,7 @@ namespace PolitiLog
 
             // build embeds
             foreach (var change in changes)
-                embeds.Add(CreateEmbed(change, false));
+                embeds.Add(CreateEmbed(change));
 
             // remove errors
             embeds.RemoveAll(o => o == null);
@@ -82,14 +82,17 @@ namespace PolitiLog
             return revisions;
         }
 
-        private Embed CreateEmbed(Change data, bool inline)
+        private Embed CreateEmbed(Change data)
         {
             try
             {
+                if (data.IsNewUser())
+                    return CreateNewUserEmbed(data);
+
                 StringBuilder messageBuilder = new StringBuilder();
                 messageBuilder.AppendLine(String.Format("**Contributeur·ice**: {0}", String.Format("[{0}](https://politiwiki.fr/wiki/Utilisateur:{1})", data.User, data.User)));
                 messageBuilder.AppendLine(String.Format("**Page**: {0}", String.Format("[{0}]({1}/wiki/{2})", data.Title, _wikiUrl, data.Title.Replace(' ', '_'))));
-                messageBuilder.AppendLine(String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment) ? "?" : data.Comment));
+                messageBuilder.AppendLine(String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment) ? String.Empty : data.Comment));
 
                 if (data.Type == "edit")
                     messageBuilder.AppendLine(String.Format("**Modification**: {0}", String.Format("[Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId))));
@@ -99,7 +102,7 @@ namespace PolitiLog
                 var content = new EmbedFieldBuilder()
                         .WithName("Description")
                         .WithValue(messageBuilder.ToString())
-                        .WithIsInline(inline);
+                        .WithIsInline(false);
 
                 var footer = new EmbedFooterBuilder()
                         .WithText("Merci pour ton travail !")
@@ -120,9 +123,46 @@ namespace PolitiLog
             }
         }
 
+        private Embed CreateNewUserEmbed(Change data)
+        {
+            try
+            {
+                StringBuilder messageBuilder = new StringBuilder();
+                messageBuilder.AppendLine("Afin de nous aider le plus efficacement possible");
+                messageBuilder.AppendLine("Tu peux consulte les règles du wiki [ici](https://politiwiki.fr/wiki/R%C3%A8gles)");
+                messageBuilder.AppendLine("Et aussi consulter le guide de contribution [ici](https://politiwiki.fr/wiki/Guide_de_contribution)");
+
+                var content = new EmbedFieldBuilder()
+                        .WithName(String.Format("Bienvenue parmis nous {0} !", data.User))
+                        .WithValue(messageBuilder.ToString())
+                        .WithIsInline(false);
+
+                var footer = new EmbedFooterBuilder()
+                        .WithText("A bientôt sur PolitiWiki !")
+                        .WithIconUrl("https://emmanuelistace.be/misc/heart2.png");
+
+                var builder = new EmbedBuilder()
+                        .WithAuthor(BuildTitle(data))
+                        .AddField(content)
+                        .WithFooter(footer)
+                        .WithColor(Color.Blue);
+
+                return builder.Build();
+            }
+            catch (Exception ex)
+            {
+                _logger.AddLog(ex.Message);
+                return null;
+            }
+        }
+
         private EmbedAuthorBuilder BuildTitle(Change data)
         {
-            if (data.Type == "edit")
+            if(data.IsNewUser())
+                return new EmbedAuthorBuilder()
+                    .WithName("Un·e nouveau·elle contributeur·ice nous a rejoint !")
+                    .WithIconUrl("https://emmanuelistace.be/politibot/hand_wave.png");
+            else if (data.Type == "edit")
                 return new EmbedAuthorBuilder()
                     .WithName("Edition d'une page")
                     .WithIconUrl("https://emmanuelistace.be/politibot/pencil.png");

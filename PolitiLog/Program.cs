@@ -14,13 +14,14 @@ namespace PolitiLog
                     {
                         try
                         {
-                            SimpleLogger logger = new SimpleLogger();
+                            SimpleLogger logger = new SimpleLogger(option.RealTimeLog);
                             logger.AddLog("-----------------");
                             logger.AddLog("Start application");
 
                             FileHelper fileHelper = new FileHelper(logger, "./last_change", option.LogFile);
 
                             DateTime lastChangeDate = fileHelper.GetLastChangeDateTime();
+
                             logger.AddLog(String.Format("Last change dates from {0}", lastChangeDate.ToUniversalTime().ToString("o")));
 
                             ChangeNotifier changeNotfier = new ChangeNotifier(logger, option.WebHook, option.Wiki, option.Limit);
@@ -29,7 +30,7 @@ namespace PolitiLog
 
                             logger.AddLog("Stop Application");
 
-                            if (!option.Silent)
+                            if (!option.Silent && !option.RealTimeLog)
                                 logger.WriteLogsToConsole();
 
                             fileHelper.SaveNewDate(newestDate);

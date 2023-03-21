@@ -6,10 +6,19 @@ namespace PolitiLog
     class SimpleLogger
     {
         public List<string> _logs = new List<string>();
+        private bool _realTime;
+
+        public SimpleLogger(bool realtime)
+        {
+            _realTime = realtime;
+        }
 
         public void AddLog(string log)
         {
-            _logs.Add(String.Format("[{0}] {1}", DateTime.Now.ToUniversalTime().ToString("o"), log));
+            var logtoAdd = String.Format("[{0}] {1}", DateTime.Now.ToUniversalTime().ToString("o"), log);
+            if (_realTime)
+                Console.WriteLine(logtoAdd);
+            _logs.Add(logtoAdd);
         }
 
         public void WriteLogsToConsole()

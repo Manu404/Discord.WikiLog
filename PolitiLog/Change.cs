@@ -13,6 +13,7 @@ namespace PolitiLog
         public string Page { get; private set; }
         public int RevId { get; private set; }
         public int OldRevId { get; private set; }
+        public int PageId { get; private set; }
 
         public Change(JToken data)
         {
@@ -24,6 +25,14 @@ namespace PolitiLog
             Date = DateTime.Parse(data.Value<string>("timestamp"));
             RevId = data.Value<int>("revid");
             OldRevId = data.Value<int>("old_revid");
+            PageId = data.Value<int>("pageid");
+        }
+
+        public bool IsNewUser()
+        {
+            return PageId == 0 && RevId == 0 && OldRevId == 0 
+                    && String.Equals(Title, String.Format("Utilisateur:{0}", User)) 
+                    && String.IsNullOrEmpty(Comment);
         }
     }
 }

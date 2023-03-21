@@ -23,6 +23,9 @@ namespace PolitiLog
 
             [Option('s', "silent", Required = false, HelpText = "Produce no output in the console.")]
             public bool Silent { get; set; }
+
+            [Option("real-time-log", Required = false, Default = true, HelpText = "Output log to console in real time.")]
+            public bool RealTimeLog { get; set; }
         }
     }
 }
