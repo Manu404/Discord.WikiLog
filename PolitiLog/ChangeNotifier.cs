@@ -128,9 +128,10 @@ namespace PolitiLog
             try
             {
                 StringBuilder messageBuilder = new StringBuilder();
-                messageBuilder.AppendLine("Afin de nous aider le plus efficacement possible");
-                messageBuilder.AppendLine("Tu peux consulte les règles du wiki [ici](https://politiwiki.fr/wiki/R%C3%A8gles)");
-                messageBuilder.AppendLine("Et aussi consulter le guide de contribution [ici](https://politiwiki.fr/wiki/Guide_de_contribution)");
+                messageBuilder.AppendLine("Afin de nous aider le plus efficacement possible:");
+                messageBuilder.AppendLine("• Tu peux consulter les règles du wiki [ici](https://politiwiki.fr/wiki/R%C3%A8gles)");
+                messageBuilder.AppendLine("• Et tu peux consulter le guide de contribution [ici](https://politiwiki.fr/wiki/Guide_de_contribution)");
+                messageBuilder.AppendLine("A bientôt !");
 
                 var content = new EmbedFieldBuilder()
                         .WithName(String.Format("Bienvenue parmis nous {0} !", data.User))
@@ -138,7 +139,7 @@ namespace PolitiLog
                         .WithIsInline(false);
 
                 var footer = new EmbedFooterBuilder()
-                        .WithText("A bientôt sur PolitiWiki !")
+                        .WithText("Merci de nous avoir rejoint !")
                         .WithIconUrl("https://emmanuelistace.be/misc/heart2.png");
 
                 var builder = new EmbedBuilder()
@@ -160,7 +161,7 @@ namespace PolitiLog
         {
             if(data.IsNewUser())
                 return new EmbedAuthorBuilder()
-                    .WithName("Un·e nouveau·elle contributeur·ice nous a rejoint !")
+                    .WithName("Un·e nouveau·elle contributeur·ice nous à rejoint !")
                     .WithIconUrl("https://emmanuelistace.be/politibot/hand_wave.png");
             else if (data.Type == "edit")
                 return new EmbedAuthorBuilder()
