@@ -1,5 +1,5 @@
 # Politilog
-A discord webhook based tool to publish media wiki change event to discord
+A tool based on discord webhook to publish media wiki change event to discord triggereg by cronjob to monitor wiki
 
 Future plan to make it usable by anyone. 
 
