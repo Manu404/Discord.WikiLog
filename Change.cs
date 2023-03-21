@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 
-namespace WebHookTest
+namespace PolitiLog
 {
     public class Change
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace WebHookTest
+namespace PolitiLog
 {
     class FileHelper
     {

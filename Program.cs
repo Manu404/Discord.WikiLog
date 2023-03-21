@@ -1,8 +1,7 @@
 ﻿using System;
 
-namespace WebHookTest
+namespace PolitiLog
 {
-
     partial class Program
     {
         static void Main(string[] args)
@@ -25,8 +24,6 @@ namespace WebHookTest
             fileHelper.SaveNewDate(newestDate);
             fileHelper.SaveLogs();
         }
-
-
     }
 }
    

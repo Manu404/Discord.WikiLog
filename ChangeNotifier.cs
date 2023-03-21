@@ -7,7 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace WebHookTest
+namespace PolitiLog
 {
     class ChangeNotifier
     {
@@ -22,17 +22,14 @@ namespace WebHookTest
         {
             var changes = GetChangesFromApi(lastChange).ToList();
 
-            //// remove all past changes
-            //changes.RemoveAll(o => (DateTime.Compare(o.Date, lastChange) > 0));
-
             SendToWebHook(BuildEmbeds(changes));
+
+            _logger.AddLog(String.Format("{0} new changes to publish", changes.Count));
 
             // if no changes since last check, return
             if (changes.Count == 0)
                 return lastChange;
 
-            _logger.AddLog(String.Format("{0} new changes to publish", changes.Count));
-            
             return changes.Last().Date;
         }
 
@@ -84,14 +81,14 @@ namespace WebHookTest
             try
             {
                 StringBuilder messageBuilder = new StringBuilder();
-                messageBuilder.AppendLine(String.Format("**Contributeur·ice**: {0}", data.User));
+                messageBuilder.AppendLine(String.Format("**Contributeur·ice**: {0}", String.Format("[{0}](https://politiwiki.fr/wiki/Utilisateur:{1})", data.User, data.User)));
                 messageBuilder.AppendLine(String.Format("**Page**: {0}", String.Format("[{0}](https://politiwiki.fr/wiki/{1})", data.Title, data.Title.Replace(' ', '_'))));
                 messageBuilder.AppendLine(String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment) ? "?" : data.Comment));
 
                 if (data.Type == "edit")
                     messageBuilder.AppendLine(String.Format("**Modification**: {0}", String.Format("[Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId))));
 
-                messageBuilder.AppendLine(String.Format("**Date**: {0}", data.Date.ToString("MM/dd/yyyy HH:mm:ss")));
+                messageBuilder.AppendLine(String.Format("**Date**: {0}", data.Date.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")));
 
                 var content = new EmbedFieldBuilder()
                         .WithName("Description")
@@ -147,7 +144,7 @@ namespace WebHookTest
                 try
                 {
                     var client = new DiscordWebhookClient("https://discord.com/api/webhooks/1086991170342768742/5ewHAl8tyeNFVyPCTGH2071Ni_lU_SDtc4_D2wr6A9NYigiFeRD0Dw7lQqBTV_zUFwog");
-                    client.SendMessageAsync(text: "Nouveau changement sur politiwiki !", embeds: new[] { embed }).Wait();
+                    client.SendMessageAsync(text: "Nouveau changement sur PolitiWiki !", embeds: new[] { embed }).Wait();
                 }
                 catch (Exception e){
                     _logger.AddLog(e.Message);
