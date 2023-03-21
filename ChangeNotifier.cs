@@ -62,7 +62,7 @@ namespace PolitiLog
                     // for each revisions, only keep edit, new and log type of revision
                     foreach (var change in jsonObject["query"]["recentchanges"])
                         if (change.Value<string>("type") == "edit" || change.Value<string>("type") == "new" || change.Value<string>("type") == "log")
-                            if (DateTime.Parse(change.Value<string>("timestamp")) >= lastChange)
+                            if (DateTime.Parse(change.Value<string>("timestamp")) > lastChange)
                                 revisions.Add(new Change(change));
 
                     // sort by date
