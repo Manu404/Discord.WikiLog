@@ -134,7 +134,7 @@ namespace PolitiLog
                 messageBuilder.AppendLine("A bientôt !");
 
                 var content = new EmbedFieldBuilder()
-                        .WithName(String.Format("Bienvenue parmis nous {0} !", data.User))
+                        .WithName(String.Format("Bienvenue parmi nous {0} !", data.User))
                         .WithValue(messageBuilder.ToString())
                         .WithIsInline(false);
 
