@@ -12,10 +12,16 @@ namespace PolitiLog
     class ChangeNotifier
     {
         private SimpleLogger _logger;
+        private string _webhookUrl;
+        private string _wikiUrl;
+        private int _queryLimit;
 
-        public ChangeNotifier(SimpleLogger logger)
+        public ChangeNotifier(SimpleLogger logger, string webhookUrl, string wikiUrl, int queryLimit)
         {
             _logger = logger;
+            _webhookUrl = webhookUrl;
+            _wikiUrl = wikiUrl;
+            _queryLimit = queryLimit;
         }
 
         public DateTime SendRevisionSinceLastRevision(DateTime lastChange)
@@ -55,7 +61,7 @@ namespace PolitiLog
                 using (WebClient client = new WebClient())
                 {
                     // Query api and parse json
-                    string queryUrl = $"https://politiwiki.fr/w/api.php?action=query&list=recentchanges&rcprop=ids|title|user|comment|timestamp&rclimit=50&format=json";
+                    string queryUrl = String.Format("{0}/w/api.php?action=query&list=recentchanges&rcprop=ids|title|user|comment|timestamp&rclimit={1}&format=json", _wikiUrl, _queryLimit);
                     string json = client.DownloadString(queryUrl);
                     JObject jsonObject = JObject.Parse(json);
 
@@ -82,7 +88,7 @@ namespace PolitiLog
             {
                 StringBuilder messageBuilder = new StringBuilder();
                 messageBuilder.AppendLine(String.Format("**Contributeur·ice**: {0}", String.Format("[{0}](https://politiwiki.fr/wiki/Utilisateur:{1})", data.User, data.User)));
-                messageBuilder.AppendLine(String.Format("**Page**: {0}", String.Format("[{0}](https://politiwiki.fr/wiki/{1})", data.Title, data.Title.Replace(' ', '_'))));
+                messageBuilder.AppendLine(String.Format("**Page**: {0}", String.Format("[{0}]({1}/wiki/{2})", data.Title, _wikiUrl, data.Title.Replace(' ', '_'))));
                 messageBuilder.AppendLine(String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment) ? "?" : data.Comment));
 
                 if (data.Type == "edit")
@@ -134,7 +140,7 @@ namespace PolitiLog
 
         private string BuildDiffUrl(string paneName, int diff, int oldid)
         {
-            return String.Format("https://politiwiki.fr/w/index.php?title={0}&diff={1}&oldid={2}", paneName.Replace(' ', '_'), diff, oldid);
+            return String.Format("{0}/w/index.php?title={1}&diff={2}&oldid={3}", _wikiUrl, paneName.Replace(' ', '_'), diff, oldid);
         }
 
         private void SendToWebHook(IEnumerable<Embed> embedsList)
@@ -143,7 +149,7 @@ namespace PolitiLog
             {
                 try
                 {
-                    var client = new DiscordWebhookClient("https://discord.com/api/webhooks/1086991170342768742/5ewHAl8tyeNFVyPCTGH2071Ni_lU_SDtc4_D2wr6A9NYigiFeRD0Dw7lQqBTV_zUFwog");
+                    var client = new DiscordWebhookClient(_webhookUrl);
                     client.SendMessageAsync(text: "Nouveau changement sur PolitiWiki !", embeds: new[] { embed }).Wait();
                 }
                 catch (Exception e){
