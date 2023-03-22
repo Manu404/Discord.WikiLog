@@ -20,20 +20,20 @@ namespace PolitiLog
 
                             FileHelper fileHelper = new FileHelper(logger, "./last_change", option.LogFile);
 
-                            DateTime lastChangeDate = fileHelper.GetLastChangeDateTime();
+                            DateTime lastChangeDate = fileHelper.GetLastChangeDateTime().ToUniversalTime();
 
-                            logger.AddLog(String.Format("Last change dates from {0}", lastChangeDate.ToUniversalTime().ToString("o")));
+                            logger.AddLog(String.Format("Last change dates from {0}", lastChangeDate.ToString("o")));
 
                             ChangeNotifier changeNotfier = new ChangeNotifier(logger, option.WebHook, option.Wiki, option.Limit);
 
-                            DateTime newestDate = changeNotfier.SendRevisionSinceLastRevision(lastChangeDate).ToUniversalTime();
+                            DateTime newestDate = changeNotfier.SendRevisionSinceLastRevision(lastChangeDate);
 
                             logger.AddLog("Stop Application");
 
                             if (!option.Silent && !option.RealTimeLog)
                                 logger.WriteLogsToConsole();
 
-                            fileHelper.SaveNewDate(newestDate);
+                            fileHelper.SaveNewDate(newestDate.ToUniversalTime());
 
                             if (!option.NoLog)
                                 fileHelper.SaveLogs();

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Globalization;
 
 namespace PolitiLog
 {
@@ -22,7 +23,7 @@ namespace PolitiLog
             Comment = data.Value<string>("comment");
             Page = data.Value<string>("page");
             Type = data.Value<string>("type");
-            Date = DateTime.Parse(data.Value<string>("timestamp"));
+            Date = data.Value<DateTime>("timestamp");
             RevId = data.Value<int>("revid");
             OldRevId = data.Value<int>("old_revid");
             PageId = data.Value<int>("pageid");

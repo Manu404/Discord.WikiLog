@@ -3,9 +3,12 @@ using Discord.Webhook;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PolitiLog
 {
@@ -68,7 +71,7 @@ namespace PolitiLog
                     // for each revisions, only keep edit, new and log type of revision
                     foreach (var change in jsonObject["query"]["recentchanges"])
                         if (change.Value<string>("type") == "edit" || change.Value<string>("type") == "new" || change.Value<string>("type") == "log")
-                            if (DateTime.Parse(change.Value<string>("timestamp")) > lastChange)
+                            if (change.Value<DateTime>("timestamp").ToUniversalTime() > lastChange.ToUniversalTime())
                                 revisions.Add(new Change(change));
 
                     // sort by date
@@ -97,7 +100,7 @@ namespace PolitiLog
                 if (data.Type == "edit")
                     messageBuilder.AppendLine(String.Format("**Modification**: {0}", String.Format("[Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId))));
 
-                messageBuilder.AppendLine(String.Format("**Date**: {0}", data.Date.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")));
+                messageBuilder.AppendLine(String.Format("**Date**: {0}", data.Date.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss")));
 
                 var content = new EmbedFieldBuilder()
                         .WithName("Description")
