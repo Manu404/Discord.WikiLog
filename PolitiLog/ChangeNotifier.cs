@@ -97,7 +97,7 @@ namespace PolitiLog
                 if (data.Type == "edit")
                     messageBuilder.AppendLine(String.Format("**Modification**: {0}", String.Format("[Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId))));
 
-                messageBuilder.AppendLine(String.Format("**Date**: {0}", data.Date.ToString("MM/dd/yyyy HH:mm:ss")));
+                messageBuilder.AppendLine(String.Format("**Date**: {0}", data.Date.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss")));
 
                 var content = new EmbedFieldBuilder()
                         .WithName("Description")
