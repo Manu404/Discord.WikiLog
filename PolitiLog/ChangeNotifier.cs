@@ -93,12 +93,12 @@ namespace PolitiLog
                     return CreateNewUserEmbed(data);
 
                 StringBuilder messageBuilder = new StringBuilder();
-                messageBuilder.AppendLine(String.Format("**Contributeur·ice**: {0}", String.Format("[{0}](https://politiwiki.fr/wiki/Utilisateur:{1})", data.User, data.User)));
-                messageBuilder.AppendLine(String.Format("**Page**: {0}", String.Format("[{0}]({1}/wiki/{2})", data.Title, _wikiUrl, data.Title.Replace(' ', '_'))));
+                messageBuilder.AppendLine(String.Format("**Contributeur·ice**: [{0}](https://politiwiki.fr/wiki/Utilisateur:{1})", data.User, data.User.Replace(' ', '_')));
+                messageBuilder.AppendLine(String.Format("**Page**: [{0}]({1}/wiki/{2})", data.Title, _wikiUrl, data.Title.Replace(' ', '_')));
                 messageBuilder.AppendLine(String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment) ? String.Empty : data.Comment));
 
                 if (data.Type == "edit")
-                    messageBuilder.AppendLine(String.Format("**Modification**: {0}", String.Format("[Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId))));
+                    messageBuilder.AppendLine(String.Format("**Modification**: [Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId)));
 
                 messageBuilder.AppendLine(String.Format("**Date**: {0}", data.Date.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss")));
 
