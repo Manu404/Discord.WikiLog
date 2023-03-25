@@ -109,7 +109,7 @@ namespace PolitiLog
 
                 var footer = new EmbedFooterBuilder()
                         .WithText("Merci pour ton travail !")
-                        .WithIconUrl("https://emmanuelistace.be/misc/heart2.png");
+                        .WithIconUrl("https://emmanuelistace.be/politibot/heart.png");
 
                 var builder = new EmbedBuilder()
                         .WithAuthor(BuildTitle(data))
@@ -143,7 +143,7 @@ namespace PolitiLog
 
                 var footer = new EmbedFooterBuilder()
                         .WithText("Merci de nous avoir rejoint !")
-                        .WithIconUrl("https://emmanuelistace.be/misc/heart2.png");
+                        .WithIconUrl("https://emmanuelistace.be/politibot/heart.png");
 
                 var builder = new EmbedBuilder()
                         .WithAuthor(BuildTitle(data))
