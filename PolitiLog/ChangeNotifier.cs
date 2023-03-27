@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -91,16 +92,18 @@ namespace PolitiLog
             {
                 if (data.IsNewUser())
                     return CreateNewUserEmbed(data);
+                else if (data.IsFileUpload())
+                    return CreateFileUploadEmbed(data);
 
                 StringBuilder messageBuilder = new StringBuilder();
-                messageBuilder.AppendLine(String.Format("**Contributeur·ice**: [{0}](https://politiwiki.fr/wiki/Utilisateur:{1})", data.User, data.User.Replace(' ', '_')));
-                messageBuilder.AppendLine(String.Format("**Page**: [{0}]({1}/wiki/{2})", data.Title, _wikiUrl, data.Title.Replace(' ', '_')));
-                messageBuilder.AppendLine(String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment) ? String.Empty : data.Comment));
+                messageBuilder.AppendLine(GetContributor(data));
+                messageBuilder.AppendLine(GetPage(data));
+                messageBuilder.AppendLine(GetComment(data));
 
                 if (data.Type == "edit")
-                    messageBuilder.AppendLine(String.Format("**Modification**: [Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId)));
+                    messageBuilder.AppendLine(GetRevDiff(data));
 
-                messageBuilder.AppendLine(String.Format("**Date**: {0}", data.Date.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss")));
+                messageBuilder.AppendLine(GetDate(data));
 
                 var content = new EmbedFieldBuilder()
                         .WithName("Description")
@@ -126,6 +129,44 @@ namespace PolitiLog
             }
         }
 
+
+        private Embed CreateFileUploadEmbed(Change data)
+        {
+            try
+            {
+                var imageUrl = String.Empty;
+                StringBuilder messageBuilder = new StringBuilder();
+                messageBuilder.AppendLine(GetContributor(data));
+                messageBuilder.AppendLine(GetPage(data));
+                messageBuilder.AppendLine(GetComment(data));
+                messageBuilder.AppendLine(GetDate(data));
+
+                var content = new EmbedFieldBuilder()
+                        .WithName("Description")
+                        .WithValue(messageBuilder.ToString())
+                        .WithIsInline(false);
+
+                var footer = new EmbedFooterBuilder()
+                        .WithText("Merci pour ton travail !")
+                        .WithIconUrl("https://emmanuelistace.be/politibot/heart.png");
+
+                imageUrl = GetImageUrl(data);
+
+                var builder = new EmbedBuilder()
+                        .WithAuthor(BuildTitle(data))
+                        .AddField(content)
+                        .WithFooter(footer)
+                        .WithImageUrl(imageUrl)
+                        .WithColor(Color.Gold);
+
+                return builder.Build();
+            }
+            catch (Exception ex)
+            {
+                _logger.AddLog(ex.Message);
+                return null;
+            }
+        }
         private Embed CreateNewUserEmbed(Change data)
         {
             try
@@ -160,6 +201,49 @@ namespace PolitiLog
             }
         }
 
+        private string GetComment(Change data)
+        {
+            return String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment) ? String.Empty : data.Comment);
+        }
+
+        private string GetContributor(Change data)
+        {
+            return String.Format("**Contributeur·ice**: [{0}](https://politiwiki.fr/wiki/Utilisateur:{1})", data.User, data.User.Replace(' ', '_'));
+        }
+
+        private string GetPage(Change data)
+        {
+            return String.Format("**Page**: [{0}]({1})", data.Title, GetWikiPageUrl(data));
+        }
+
+        private string GetDate(Change data)
+        {
+            return String.Format("**Date**: {0}", data.Date.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss"));
+        }
+
+        private string GetRevDiff(Change data)
+        {
+            return String.Format("**Modification**: [Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId));
+        }
+
+        private string GetImageUrl(Change data)
+        {
+            string imageUrl = String.Empty;
+            using (WebClient client = new WebClient())
+            {
+                string pageContent = client.DownloadString(GetWikiPageUrl(data));
+                Regex regex = new Regex(@"(fullImageLink).*?(href=)(.*?)(>)");
+                Match match = regex.Match(pageContent);
+                imageUrl = String.Format("{0}/{1}", _wikiUrl, match.Groups[3].Value.Replace("\"", " ").Trim());
+            }
+            return imageUrl;
+        }
+
+        private string GetWikiPageUrl(Change data)
+        {
+            return String.Format("{0}/wiki/{1}", _wikiUrl, data.Title.Replace(' ', '_'));
+        }
+
         private EmbedAuthorBuilder BuildTitle(Change data)
         {
             if(data.IsNewUser())
@@ -174,10 +258,14 @@ namespace PolitiLog
                 return new EmbedAuthorBuilder()
                     .WithName("Création d'une page")
                     .WithIconUrl("https://emmanuelistace.be/politibot/add.png");
-            else if (data.Type == "log")
+            else if (data.Type == "log" && !data.IsFileUpload())
                 return new EmbedAuthorBuilder()
                     .WithName("Action de maintenance")
                     .WithIconUrl("https://emmanuelistace.be/politibot/settings.png");
+            else if (data.Type == "log" && data.IsFileUpload())
+                return new EmbedAuthorBuilder()
+                    .WithName("Nouveau fichier mis en ligne")
+                    .WithIconUrl("https://emmanuelistace.be/politibot/photo.png");
             else
                 return new EmbedAuthorBuilder();
         }

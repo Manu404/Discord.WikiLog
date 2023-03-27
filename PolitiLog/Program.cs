@@ -18,7 +18,7 @@ namespace PolitiLog
                             logger.AddLog("-----------------");
                             logger.AddLog("Start application");
 
-                            FileHelper fileHelper = new FileHelper(logger, "./last_change", option.LogFile);
+                            FileHelper fileHelper = new FileHelper(logger, "./last_change", option.LogFile);                            
 
                             DateTime lastChangeDate = fileHelper.GetLastChangeDateTime().ToUniversalTime();
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Discord;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
 
@@ -31,9 +32,14 @@ namespace PolitiLog
 
         public bool IsNewUser()
         {
-            return PageId == 0 && RevId == 0 && OldRevId == 0 
+            return PageId == 0 && RevId == 0 && OldRevId == 0 && Type == "log"
                     && String.Equals(Title, String.Format("Utilisateur:{0}", User)) 
                     && String.IsNullOrEmpty(Comment);
+        }
+
+        public bool IsFileUpload()
+        {
+            return Title.StartsWith("Fichier:") && Type == "log";
         }
     }
 }
