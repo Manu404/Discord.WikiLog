@@ -94,7 +94,20 @@ namespace PolitiLog
                     return CreateNewUserEmbed(data);
                 else if (data.IsFileUpload())
                     return CreateFileUploadEmbed(data);
+                else
+                    return CreateStandardEmbed(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.AddLog(ex.Message);
+                return null;
+            }
+        }
 
+        private Embed CreateStandardEmbed(Change data)
+        {
+            try
+            {
                 StringBuilder messageBuilder = new StringBuilder();
                 messageBuilder.AppendLine(GetContributor(data));
                 messageBuilder.AppendLine(GetPage(data));
@@ -128,7 +141,6 @@ namespace PolitiLog
                 return null;
             }
         }
-
 
         private Embed CreateFileUploadEmbed(Change data)
         {
