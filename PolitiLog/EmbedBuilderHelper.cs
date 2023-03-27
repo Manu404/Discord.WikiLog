@@ -13,7 +13,7 @@ namespace PolitiLog
 
         public EmbedBuilderHelper(string wikiUrl, SimpleLogger logger)
         {
-           _logger = logger;
+            _logger = logger;
             _wikiUrl = wikiUrl; 
         }
 
@@ -143,50 +143,7 @@ namespace PolitiLog
                 return null;
             }
         }
-
-        private string GetComment(Change data)
-        {
-            return String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment) ? String.Empty : data.Comment);
-        }
-
-        private string GetContributor(Change data)
-        {
-            return String.Format("**Contributeur·ice**: [{0}](https://politiwiki.fr/wiki/Utilisateur:{1})", data.User, data.User.Replace(' ', '_'));
-        }
-
-        private string GetPage(Change data)
-        {
-            return String.Format("**Page**: [{0}]({1})", data.Title, GetWikiPageUrl(data));
-        }
-
-        private string GetDate(Change data)
-        {
-            return String.Format("**Date**: {0}", data.Date.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss"));
-        }
-
-        private string GetRevDiff(Change data)
-        {
-            return String.Format("**Modification**: [Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId));
-        }
-
-        private string GetImageUrl(Change data)
-        {
-            string imageUrl = String.Empty;
-            using (WebClient client = new WebClient())
-            {
-                string pageContent = client.DownloadString(GetWikiPageUrl(data));
-                Regex regex = new Regex(@"(fullImageLink).*?(href=)(.*?)(>)");
-                Match match = regex.Match(pageContent);
-                imageUrl = String.Format("{0}/{1}", _wikiUrl, match.Groups[3].Value.Replace("\"", " ").Trim());
-            }
-            return imageUrl;
-        }
-
-        private string GetWikiPageUrl(Change data)
-        {
-            return String.Format("{0}/wiki/{1}", _wikiUrl, data.Title.Replace(' ', '_'));
-        }
-
+        
         private EmbedAuthorBuilder BuildTitle(Change data)
         {
             if (data.IsNewUser())
@@ -213,10 +170,32 @@ namespace PolitiLog
                 return new EmbedAuthorBuilder();
         }
 
-        private string BuildDiffUrl(string paneName, int diff, int oldid)
+        private string GetComment(Change data) => String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment)? String.Empty : data.Comment);
+
+        private string GetContributor(Change data) => String.Format("**Contributeur·ice**: [{0}](https://politiwiki.fr/wiki/Utilisateur:{1})", data.User, data.User.Replace(' ', '_'));
+
+        private string GetPage(Change data) => String.Format("**Page**: [{0}]({1})", data.Title, GetWikiPageUrl(data));
+
+        private string GetDate(Change data) =>  String.Format("**Date**: {0}", data.Date.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss"));
+
+        private string GetRevDiff(Change data) => String.Format("**Modification**: [Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId));
+        
+        private string GetImageUrl(Change data)
         {
-            return String.Format("{0}/w/index.php?title={1}&diff={2}&oldid={3}", _wikiUrl, paneName.Replace(' ', '_'), diff, oldid);
+            string imageUrl = String.Empty;
+            using (WebClient client = new WebClient())
+            {
+                string pageContent = client.DownloadString(GetWikiPageUrl(data));
+                Regex regex = new Regex(@"(fullImageLink).*?(href=)(.*?)(>)");
+                Match match = regex.Match(pageContent);
+                imageUrl = String.Format("{0}/{1}", _wikiUrl, match.Groups[3].Value.Replace("\"", " ").Trim());
+            }
+            return imageUrl;
         }
+
+        private string GetWikiPageUrl(Change data) => String.Format("{0}/wiki/{1}", _wikiUrl, data.Title.Replace(' ', '_'));
+
+        private string BuildDiffUrl(string paneName, int diff, int oldid) => String.Format("{0}/w/index.php?title={1}&diff={2}&oldid={3}", _wikiUrl, paneName.Replace(' ', '_'), diff, oldid);
     }
 }
    
