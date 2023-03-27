@@ -264,8 +264,8 @@ namespace PolitiLog
                     .WithIconUrl("https://emmanuelistace.be/politibot/settings.png");
             else if (data.Type == "log" && data.IsFileUpload())
                 return new EmbedAuthorBuilder()
-                    .WithName("Nouveau fichier mis en ligne")
-                    .WithIconUrl("https://emmanuelistace.be/politibot/photo.png");
+                    .WithName("Ajout d'un nouveau fichier")
+                    .WithIconUrl("https://emmanuelistace.be/politibot/camera.png");
             else
                 return new EmbedAuthorBuilder();
         }
