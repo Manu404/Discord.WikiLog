@@ -20,7 +20,7 @@ namespace PolitiLog
 
                             FileHelper fileHelper = new FileHelper(logger, "./last_change", option.LogFile);                            
 
-                            DateTime lastChangeDate = fileHelper.GetLastChangeDateTime().ToUniversalTime().AddDays(-5);
+                            DateTime lastChangeDate = fileHelper.GetLastChangeDateTime().ToUniversalTime();
 
                             logger.AddLog(String.Format("Last change dates from {0}", lastChangeDate.ToString("o")));
 
