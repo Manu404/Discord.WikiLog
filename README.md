@@ -1,4 +1,4 @@
-# PolitiLog
+# WikiLog
 
 A tool based on discord webhook to publish message related to MediaWiki changes to discord channels. Actually triggered by cronjob to monitor wiki the wiki.
 
