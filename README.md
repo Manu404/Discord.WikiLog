@@ -1,6 +1,6 @@
 # WikiLog
 
-A tool based on discord webhook to publish message related to MediaWiki changes to discord channels. Actually triggered by cronjob to monitor wiki the wiki.
+A tool based on discord webhook to publish message related to MediaWiki changes to discord channels. Actually triggered by cronjob to monitor wiki.
 
 Maybe future plan to make it usable by anyone. 
 
