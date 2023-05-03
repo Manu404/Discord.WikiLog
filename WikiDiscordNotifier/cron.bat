@@ -1,0 +1,1 @@
+CALL discordwikilog.exe --webhook https://discord.com/api/webhooks/1103202446592966696/T89cZitLy7qMOKvJrlOy3Z-_CanNsS8Nj29GtC17Eot88BGKYHElr4VfEMhJLW390QLq --wiki https://politiwiki.fr/wiki/ --api https://politiwiki.fr/w/api.php --language "Localization\fr-FR.json" -l 500
