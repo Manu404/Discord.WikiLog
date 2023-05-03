@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace DiscordWikiLog
+namespace WikiDiscordNotifier
 {
     partial class Program
     {

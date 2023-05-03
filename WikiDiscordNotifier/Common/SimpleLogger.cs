@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DiscordWikiLog
+namespace WikiDiscordNotifier
 {
     public class SimpleLogger
     {

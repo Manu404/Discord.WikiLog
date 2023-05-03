@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace DiscordWikiLog
+namespace WikiDiscordNotifier
 {
     class FileHelper
     {

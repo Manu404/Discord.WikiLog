@@ -1,12 +1,7 @@
-/.vs
-/bin
-/obj
+.vs
 /output
 /multiplateform_build.sh
 /last_change
-/Properties/launchSettings.json
-/PolitiLog/bin
-/PolitiLog/obj
-/PolitiLog/Properties/launchSettings.json
-/DiscordWikiLog/bin
-/DiscordWikiLog/obj
+bin
+obj
+launchSettings.json

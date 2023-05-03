@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DiscordWikiLog
+namespace WikiDiscordNotifier
 {
     internal class l18n
     {
