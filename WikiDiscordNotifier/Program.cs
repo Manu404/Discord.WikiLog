@@ -14,7 +14,7 @@ namespace WikiDiscordNotifier
                     {
                         try
                         {
-                            SimpleLogger logger = new SimpleLogger(option.RealTimeLog);
+                            SimpleLogger logger = new SimpleLogger(option.Silent);
                             logger.AddLog("-----------------");
                             logger.AddLog("Start application");
 
@@ -32,12 +32,9 @@ namespace WikiDiscordNotifier
 
                             logger.AddLog("Stop Application");
 
-                            if (!option.Silent && !option.RealTimeLog)
-                                logger.WriteLogsToConsole();
-
                             fileHelper.SaveNewDate(newestDate.ToUniversalTime());
 
-                            if (!option.NoLog)
+                            if (!option.Silent)
                                 fileHelper.SaveLogs();
                         }
                         catch (Exception e)

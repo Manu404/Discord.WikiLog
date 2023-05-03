@@ -6,25 +6,19 @@ namespace WikiDiscordNotifier
     public class SimpleLogger
     {
         public List<string> _logs = new List<string>();
-        private bool _realTime;
+        private bool _silent;
 
-        public SimpleLogger(bool realtime)
+        public SimpleLogger(bool silent)
         {
-            _realTime = realtime;
+            _silent = silent;
         }
 
         public void AddLog(string log)
         {
+            if (_silent) return;
             var logtoAdd = String.Format("[{0}] {1}", DateTime.Now.ToLocalTime().ToString("o"), log);
-            if (_realTime)
-                Console.WriteLine(logtoAdd);
+            Console.WriteLine(logtoAdd);
             _logs.Add(logtoAdd);
-        }
-
-        public void WriteLogsToConsole()
-        {
-            foreach (var log in _logs)
-                Console.WriteLine(log);
         }
         
         public IEnumerable<string> GetLogs()

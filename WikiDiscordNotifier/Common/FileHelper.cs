@@ -74,21 +74,6 @@ namespace WikiDiscordNotifier
             }
         }
 
-        public void Savel10n(string filename, l18n loclaisation)
-        {
-            try
-            {
-                if (File.Exists(filename))
-                    File.Delete(filename);
-
-                File.WriteAllText(filename, JsonConvert.SerializeObject(loclaisation, Formatting.Indented));
-            }
-            catch (Exception e)
-            {
-                _logger.AddLog(e.Message);
-            }
-        }
-
         public l18n Loadl10n(string filename)
         {
             try
