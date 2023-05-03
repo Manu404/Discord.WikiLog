@@ -1,8 +1,8 @@
 #!/bin/bash
 
 projectVersion="1.0.0.0"
-projetFile="./DiscordWikiLog/DiscordWikiLog.csproj"
-projectName="discordwikilog"
+projetFile="./WikiDiscordNotifier/WikiDiscordNotifier.csproj"
+projectName="wikidiscordnotifier"
 buildScript="multiplateform_build.sh"
 
 chmod 755 $buildScript
