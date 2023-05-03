@@ -1,5 +1,9 @@
 # WikiLog
 
+[![Build status](https://ci.appveyor.com/api/projects/status/5n6fifahr986mj8c/branch/main?svg=true)](https://ci.appveyor.com/project/Manu404/wikidiscordnotifier/branch/main)
+
+
+
 A tool based on discord webhook to publish message related to MediaWiki changes to discord channels. Actually triggered by cronjob to monitor wiki.
 
 Maybe future plan to make it usable by anyone. 
