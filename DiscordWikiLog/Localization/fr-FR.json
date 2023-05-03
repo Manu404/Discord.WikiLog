@@ -1,26 +1,32 @@
 {
   "WebhookMessage": "Nouveau changement sur PolitiWiki !",
-  "Commentary": "Commentaire",
+
+  "Comment": "Commentaire",
   "Contributor": "Contributeur·ice",
   "Page": "Page",
   "Date": "Date",
   "Consult": "Consulter",
   "Modification": "Modification",
+
   "EditTitle": "Edition d'une page",
   "CreatePageTitle": "Création d'une page",
   "MaintenanceActionTitle": "Action de maintenance",
+
   "DefaulContentTitle": "Description",
   "DefaultFooter": "Merci pour ton travail !",
   "DefaultFooterLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/heart.png",
+
   "FileUploadTitle": "Ajout d'un nouveau fichier",
   "FileUploadContentTitle": "Description",
   "FileUploadFooter": "Merci pour ton travail !",
   "FileUploadFooterLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/heart.png",
+
   "NewUserTitle": "Un·e nouveau·elle contributeur·ice nous à rejoint !",
   "NewUserWelcomeMessageContentTitle": "Bienvenue parmi nous",
   "NewUserWelcomeMessage": "Afin de nous aider le plus efficacement possible:\n • Tu peux consulter les règles du wiki [ici](https://politiwiki.fr/wiki/R%C3%A8gles)\n • Et tu peux consulter le guide de contribution [ici](https://politiwiki.fr/wiki/Guide_de_contribution)\nÀ bientôt !",
   "NewUserWelcomeMessageFooter": "Merci de nous avoir rejoint !",
   "NewUserWelcomeMessageEmbedLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/heart.png",
+
   "NewUserEmbedLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/hand_wave.png",
   "EditPageEmbedLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/pencil.png",
   "CreatePageEmbedLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/add.png",
