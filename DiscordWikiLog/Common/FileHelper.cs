@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
-namespace PolitiLog
+namespace DiscordWikiLog
 {
     class FileHelper
     {
@@ -69,6 +71,36 @@ namespace PolitiLog
             catch (Exception e)
             {
                 _logger.AddLog(e.Message);
+            }
+        }
+
+        public void Savel10n(string filename, l18n loclaisation)
+        {
+            try
+            {
+                if (File.Exists(filename))
+                    File.Delete(filename);
+
+                File.WriteAllText(filename, JsonConvert.SerializeObject(loclaisation, Formatting.Indented));
+            }
+            catch (Exception e)
+            {
+                _logger.AddLog(e.Message);
+            }
+        }
+
+        public l18n Loadl10n(string filename)
+        {
+            try
+            {
+                string json = File.ReadAllText(filename);
+                return JsonConvert.DeserializeObject<l18n>(json);
+
+            }
+            catch (Exception e)
+            {
+                _logger.AddLog(e.Message);
+                return new l18n();
             }
         }
     }

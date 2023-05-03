@@ -4,17 +4,19 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace PolitiLog
+namespace DiscordWikiLog
 {
     class EmbedBuilderHelper
     {
         private SimpleLogger _logger;
+        private l18n _localization;
         private string _wikiUrl;
 
-        public EmbedBuilderHelper(string wikiUrl, SimpleLogger logger)
+        public EmbedBuilderHelper(string wikiUrl, SimpleLogger logger, l18n localization)
         {
             _logger = logger;
-            _wikiUrl = wikiUrl; 
+            _wikiUrl = wikiUrl;
+            _localization = localization;
         }
 
         public Embed CreateEmbed(Change data)
@@ -50,13 +52,13 @@ namespace PolitiLog
                 messageBuilder.AppendLine(GetDate(data));
 
                 var content = new EmbedFieldBuilder()
-                        .WithName("Description")
+                        .WithName(_localization.DefaulContentTitle)
                         .WithValue(messageBuilder.ToString())
                         .WithIsInline(false);
 
                 var footer = new EmbedFooterBuilder()
-                        .WithText("Merci pour ton travail !")
-                        .WithIconUrl("https://emmanuelistace.be/politibot/heart.png");
+                        .WithText(_localization.DefaultFooter)
+                        .WithIconUrl(_localization.DefaultFooterLogoUrl);
 
                 var builder = new EmbedBuilder()
                         .WithAuthor(BuildTitle(data))
@@ -85,13 +87,13 @@ namespace PolitiLog
                 messageBuilder.AppendLine(GetDate(data));
 
                 var content = new EmbedFieldBuilder()
-                        .WithName("Description")
+                        .WithName(_localization.FileUploadContentTitle)
                         .WithValue(messageBuilder.ToString())
                         .WithIsInline(false);
 
                 var footer = new EmbedFooterBuilder()
-                        .WithText("Merci pour ton travail !")
-                        .WithIconUrl("https://emmanuelistace.be/politibot/heart.png");
+                        .WithText(_localization.FileUploadFooter)
+                        .WithIconUrl(_localization.FileUploadFooterLogoUrl);
 
                 imageUrl = GetImageUrl(data);
 
@@ -115,19 +117,16 @@ namespace PolitiLog
             try
             {
                 StringBuilder messageBuilder = new StringBuilder();
-                messageBuilder.AppendLine("Afin de nous aider le plus efficacement possible:");
-                messageBuilder.AppendLine("• Tu peux consulter les règles du wiki [ici](https://politiwiki.fr/wiki/R%C3%A8gles)");
-                messageBuilder.AppendLine("• Et tu peux consulter le guide de contribution [ici](https://politiwiki.fr/wiki/Guide_de_contribution)");
-                messageBuilder.AppendLine("A bientôt !");
+                messageBuilder.AppendLine(_localization.NewUserWelcomeMessage);
 
                 var content = new EmbedFieldBuilder()
-                        .WithName(String.Format("Bienvenue parmi nous {0} !", data.User))
+                        .WithName(String.Format(_localization.NewUserWelcomeMessageContentTitle + " " + data.User + " !"))
                         .WithValue(messageBuilder.ToString())
                         .WithIsInline(false);
 
                 var footer = new EmbedFooterBuilder()
-                        .WithText("Merci de nous avoir rejoint !")
-                        .WithIconUrl("https://emmanuelistace.be/politibot/heart.png");
+                        .WithText(_localization.NewUserWelcomeMessageFooter)
+                        .WithIconUrl(_localization.NewUserWelcomeMessageEmbedLogoUrl);
 
                 var builder = new EmbedBuilder()
                         .WithAuthor(BuildTitle(data))
@@ -148,37 +147,37 @@ namespace PolitiLog
         {
             if (data.IsNewUser())
                 return new EmbedAuthorBuilder()
-                    .WithName("Un·e nouveau·elle contributeur·ice nous à rejoint !")
-                    .WithIconUrl("https://emmanuelistace.be/politibot/hand_wave.png");
+                    .WithName(_localization.NewUserTitle)
+                    .WithIconUrl(_localization.NewUserWelcomeMessageEmbedLogoUrl);
             else if (data.Type == "edit")
                 return new EmbedAuthorBuilder()
-                    .WithName("Edition d'une page")
-                    .WithIconUrl("https://emmanuelistace.be/politibot/pencil.png");
+                    .WithName(_localization.EditTitle)
+                    .WithIconUrl(_localization.EditPageEmbedLogoUrl);
             else if (data.Type == "new")
                 return new EmbedAuthorBuilder()
-                    .WithName("Création d'une page")
-                    .WithIconUrl("https://emmanuelistace.be/politibot/add.png");
+                    .WithName(_localization.CreatePageTitle)
+                    .WithIconUrl(_localization.NewUserWelcomeMessageEmbedLogoUrl);
             else if (data.Type == "log" && !data.IsFileUpload())
                 return new EmbedAuthorBuilder()
-                    .WithName("Action de maintenance")
-                    .WithIconUrl("https://emmanuelistace.be/politibot/settings.png");
+                    .WithName(_localization.MaintenanceActionTitle)
+                    .WithIconUrl(_localization.MaintenanceActionEmbedLogoUrl);
             else if (data.Type == "log" && data.IsFileUpload())
                 return new EmbedAuthorBuilder()
-                    .WithName("Ajout d'un nouveau fichier")
-                    .WithIconUrl("https://emmanuelistace.be/politibot/camera.png");
+                    .WithName(_localization.FileUploadTitle)
+                    .WithIconUrl(_localization.FileUploadEmbedLogoUrl);
             else
                 return new EmbedAuthorBuilder();
         }
 
-        private string GetComment(Change data) => String.Format("**Commentaire**: {0}", String.IsNullOrEmpty(data.Comment)? String.Empty : data.Comment);
+        private string GetComment(Change data) { return $"**{_localization.Commentary}**: {(String.IsNullOrEmpty(data.Comment) ? String.Empty : data.Comment)}"; }
 
-        private string GetContributor(Change data) => String.Format("**Contributeur·ice**: [{0}](https://politiwiki.fr/wiki/Utilisateur:{1})", data.User, data.User.Replace(' ', '_'));
+        private string GetContributor(Change data) { return $"**{_localization.Contributor}**: [{data.User}](https://politiwiki.fr/wiki/User:{data.User.Replace(' ', '_')})"; }
 
-        private string GetPage(Change data) => String.Format("**Page**: [{0}]({1})", data.Title, GetWikiPageUrl(data));
+        private string GetPage(Change data) { return $"**{_localization.Page}**: [{data.Title}]({GetWikiPageUrl(data)})"; }
 
-        private string GetDate(Change data) =>  String.Format("**Date**: {0}", data.Date.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss"));
+        private string GetDate(Change data) { return $"**{_localization.Date}**: {data.Date.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss")}"; }
 
-        private string GetRevDiff(Change data) => String.Format("**Modification**: [Consulter]({0})", BuildDiffUrl(data.Title, data.RevId, data.OldRevId));
+        private string GetRevDiff(Change data) { return $"**{_localization.Modification}**: [{_localization.Consult}]({BuildDiffUrl(data.Title, data.RevId, data.OldRevId)})"; }
         
         private string GetImageUrl(Change data)
         {
@@ -193,9 +192,9 @@ namespace PolitiLog
             return imageUrl;
         }
 
-        private string GetWikiPageUrl(Change data) => String.Format("{0}/wiki/{1}", _wikiUrl, data.Title.Replace(' ', '_'));
+        private string GetWikiPageUrl(Change data) { return $"{_wikiUrl}/{data.Title.Replace(' ', '_')}"; }
 
-        private string BuildDiffUrl(string paneName, int diff, int oldid) => String.Format("{0}/w/index.php?title={1}&diff={2}&oldid={3}", _wikiUrl, paneName.Replace(' ', '_'), diff, oldid);
+        private string BuildDiffUrl(string paneName, int diff, int oldid) { return $"{_wikiUrl}/index.php?title={paneName.Replace(' ', '_')}&diff={diff}&oldid={oldid}"; }
     }
 }
    

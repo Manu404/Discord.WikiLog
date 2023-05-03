@@ -1,0 +1,3 @@
+[submodule "build/MultiplateformDotNetCoreBuildScript"]
+	path = build/MultiplateformDotNetCoreBuildScript
+	url = https://github.com/Manu404/MultiplateformDotNetCoreBuildScript.git

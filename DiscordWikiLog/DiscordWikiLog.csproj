@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>politilog</AssemblyName>
-    <RootNamespace>politilog</RootNamespace>
+    <TargetFramework>net7.0</TargetFramework>
+    <AssemblyName>discordwikilog</AssemblyName>
+    <RootNamespace>DiscordWikiLog</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +31,12 @@
   <ItemGroup>
     <None Update="last_change">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Localization\en-US.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Localization\fr-FR.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

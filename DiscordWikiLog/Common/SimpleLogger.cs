@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PolitiLog
+namespace DiscordWikiLog
 {
     public class SimpleLogger
     {

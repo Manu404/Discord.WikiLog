@@ -1,9 +1,7 @@
-﻿using Discord;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Globalization;
 
-namespace PolitiLog
+namespace DiscordWikiLog
 {
     public class Change
     {
@@ -33,8 +31,8 @@ namespace PolitiLog
         public bool IsNewUser()
         {
             return PageId == 0 && RevId == 0 && OldRevId == 0 && Type == "log"
-                    && String.Equals(Title, String.Format("Utilisateur:{0}", User)) 
-                    && String.IsNullOrEmpty(Comment);
+                    && string.Equals(Title, string.Format("Utilisateur:{0}", User))
+                    && string.IsNullOrEmpty(Comment);
         }
 
         public bool IsFileUpload()
@@ -43,4 +41,4 @@ namespace PolitiLog
         }
     }
 }
-   
+

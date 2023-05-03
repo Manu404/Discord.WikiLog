@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using System;
 
-namespace PolitiLog
+namespace DiscordWikiLog
 {
     partial class Program
     {
@@ -18,13 +18,15 @@ namespace PolitiLog
                             logger.AddLog("-----------------");
                             logger.AddLog("Start application");
 
-                            FileHelper fileHelper = new FileHelper(logger, "./last_change", option.LogFile);                            
+                            FileHelper fileHelper = new FileHelper(logger, "./last_change", option.LogFile);
+
+                            var localization = fileHelper.Loadl10n(option.Language);
 
                             DateTime lastChangeDate = fileHelper.GetLastChangeDateTime().ToUniversalTime();
 
                             logger.AddLog(String.Format("Last change dates from {0}", lastChangeDate.ToString("o")));
 
-                            ChangeNotifier changeNotfier = new ChangeNotifier(logger, option.WebHook, option.Wiki, option.Limit);
+                            ChangeNotifier changeNotfier = new ChangeNotifier(logger, option.WebHook, option.Api, option.Wiki, option.Limit, localization);
 
                             DateTime newestDate = changeNotfier.SendRevisionSinceLastRevision(lastChangeDate);
 

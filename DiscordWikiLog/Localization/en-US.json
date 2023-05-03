@@ -1,0 +1,35 @@
+{
+  "WebhookMessage": "New changes are available !",
+
+  "EditTitle": "A Page has been edited",
+  "CreatePageTitle": "A new page was created",
+  "MaintenanceActionTitle": "Maintenance action",
+
+  "Commentary": "Commentary",
+  "Contributor": "Contributor",
+  "Page": "Page",
+  "Date": "Date",
+  "Consult": "Consult",
+  "Modification": "Modification",
+
+  "DefaulContentTitle": "Description",
+  "DefaultFooter": "Thanks you for your work !",
+  "DefaultFooterLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/heart.png",
+
+  "FileUploadTitle": "A new file has been added",
+  "FileUploadContentTitle": "Description",
+  "FileUploadFooter": "Thanks for your work !",
+  "FileUploadFooterLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/heart.png",
+
+  "NewUserTitle": "A new user joined us !",
+  "NewUserWelcomeMessageContentTitle": "Welcome amoung us",
+  "NewUserWelcomeMessage": "Welcome among us, to help us the best you can:\\n • Consult the wiki rules\\n • Consult the contribution guide\\nSee you soon !",
+  "NewUserWelcomeMessageFooter": "Thanks for joining us",
+
+  "NewUserWelcomeMessageEmbedLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/heart.png",
+  "NewUserEmbedLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/hand_wave.png",
+  "EditPageEmbedLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/pencil.png",
+  "CreatePageEmbedLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/add.png",
+  "MaintenanceActionEmbedLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/settings.png",
+  "FileUploadEmbedLogoUrl": "https://discordwikilog.emmanuelistace.be/visuals/visuals/camera.png"
+}

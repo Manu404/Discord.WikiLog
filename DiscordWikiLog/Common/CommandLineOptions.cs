@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace PolitiLog
+namespace DiscordWikiLog
 {
     partial class Program
     {
@@ -11,6 +11,12 @@ namespace PolitiLog
 
             [Option("wiki", Required = true, HelpText = "Url of the wiki to monitor. eg: https://mywiki.com/")]
             public string Wiki { get; set; }
+
+            [Option("api", Required = true, HelpText = "Url of the api.php file. eg: https://mywiki.com/w/api.php")]
+            public string Api { get; set; }
+
+            [Option("language", Required = false, HelpText = "Language file")]
+            public string Language { get; set; }
 
             [Option("log-file", Required = false, Default = "./log", HelpText = "File to write logs of the application")]
             public string LogFile { get; set; }
