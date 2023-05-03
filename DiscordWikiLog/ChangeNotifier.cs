@@ -76,7 +76,7 @@ namespace DiscordWikiLog
                     // for each revisions, only keep edit, new and log type of revision
                     foreach (var change in jsonObject["query"]["recentchanges"])
                         if (change.Value<string>("type") == "edit" || change.Value<string>("type") == "new" || change.Value<string>("type") == "log")
-                            if (change.Value<DateTime>("timestamp").ToUniversalTime() < lastChange.ToUniversalTime())
+                            if (change.Value<DateTime>("timestamp").ToUniversalTime() > lastChange.ToUniversalTime())
                                 revisions.Add(new Change(change));
 
                     // sort by date
