@@ -15,21 +15,23 @@ namespace WikiDiscordNotifier
         private l18n _localization;
 
         private string _webhookUrl;
-        private string _apiUrl;
-        private string _wikiUrl;
+        private string _api;
+        private string _wiki;
+        private string _domain;
         private int _queryLimit;
 
-        public ChangeNotifier(SimpleLogger logger, string webhookUrl, string api, string wiki, int queryLimit, l18n localization)
+        public ChangeNotifier(SimpleLogger logger, string webhookUrl, string domain, string api, string wiki, int queryLimit, l18n localization)
         {
             _logger = logger;
             _localization = localization;
 
             _webhookUrl = webhookUrl;
-            _apiUrl = api;
-            _wikiUrl = wiki;
+            _api = api;
+            _wiki = wiki;
+            _domain = domain;
             _queryLimit = queryLimit;
 
-            _builder = new EmbedBuilderHelper(_wikiUrl, _logger, localization);
+            _builder = new EmbedBuilderHelper(_domain, _wiki, _logger, localization);
         }
 
         public DateTime SendRevisionSinceLastRevision(DateTime lastChange)
@@ -69,7 +71,7 @@ namespace WikiDiscordNotifier
                 using (WebClient client = new WebClient())
                 {
                     // Query api and parse json
-                    string queryUrl = String.Format("{0}?action=query&list=recentchanges&rcprop=ids|title|user|comment|timestamp&rclimit={1}&format=json", _apiUrl, _queryLimit);
+                    string queryUrl = HandleDoubleDash($"{_domain}/{_api}?action=query&list=recentchanges&rcprop=ids|title|user|comment|timestamp&rclimit={_queryLimit}&format=json");
                     string json = client.DownloadString(queryUrl);
                     JObject jsonObject = JObject.Parse(json);
 
@@ -77,7 +79,7 @@ namespace WikiDiscordNotifier
                     foreach (var change in jsonObject["query"]["recentchanges"])
                         if (change.Value<string>("type") == "edit" || change.Value<string>("type") == "new" || change.Value<string>("type") == "log")
                             if (change.Value<DateTime>("timestamp").ToUniversalTime() > lastChange.ToUniversalTime())
-                                revisions.Add(new Change(change));
+                                revisions.Add(new Change(change, _localization));
 
                     // sort by date
                     revisions.Sort((x, y) => DateTime.Compare(x.Date, y.Date));
@@ -104,6 +106,9 @@ namespace WikiDiscordNotifier
                 }
             }
         }
+
+
+        private string HandleDoubleDash(string url) => url.Replace("//", "/").Replace("https:/", "https://").Replace("http:/", "http://");
     }
 }
    

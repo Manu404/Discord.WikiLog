@@ -26,7 +26,7 @@ namespace WikiDiscordNotifier
 
                             logger.AddLog(String.Format("Last change dates from {0}", lastChangeDate.ToString("o")));
 
-                            ChangeNotifier changeNotfier = new ChangeNotifier(logger, option.WebHook, option.Api, option.Wiki, option.Limit, localization);
+                            ChangeNotifier changeNotfier = new ChangeNotifier(logger, option.WebHook, option.Domain, option.Api, option.Wiki, option.Limit, localization);
 
                             DateTime newestDate = changeNotfier.SendRevisionSinceLastRevision(lastChangeDate);
 

@@ -10,12 +10,14 @@ namespace WikiDiscordNotifier
     {
         private SimpleLogger _logger;
         private l18n _localization;
-        private string _wikiUrl;
+        private string _wiki;
+        private string _domain;
 
-        public EmbedBuilderHelper(string wikiUrl, SimpleLogger logger, l18n localization)
+        public EmbedBuilderHelper(string domain, string wiki, SimpleLogger logger, l18n localization)
         {
             _logger = logger;
-            _wikiUrl = wikiUrl;
+            _wiki = wiki;
+            _domain = domain;   
             _localization = localization;
         }
 
@@ -95,7 +97,7 @@ namespace WikiDiscordNotifier
                         .WithText(_localization.FileUploadFooter)
                         .WithIconUrl(_localization.FileUploadFooterLogoUrl);
 
-                imageUrl = GetImageUrl(data);
+                imageUrl = HandleMultipleDash(GetImageUrl(data));
 
                 var builder = new EmbedBuilder()
                         .WithAuthor(BuildTitle(data))
@@ -171,13 +173,13 @@ namespace WikiDiscordNotifier
 
         private string GetComment(Change data) { return $"**{_localization.Commentary}**: {(String.IsNullOrEmpty(data.Comment) ? String.Empty : data.Comment)}"; }
 
-        private string GetContributor(Change data) { return $"**{_localization.Contributor}**: [{data.User}](https://politiwiki.fr/wiki/User:{data.User.Replace(' ', '_')})"; }
+        private string GetContributor(Change data) { return $"**{_localization.Contributor}**: [{data.User}]({HandleMultipleDash(GetUserPage(data))})"; }
 
-        private string GetPage(Change data) { return $"**{_localization.Page}**: [{data.Title}]({GetWikiPageUrl(data)})"; }
+        private string GetPage(Change data) { return $"**{_localization.Page}**: [{data.Title}]({HandleMultipleDash(GetWikiPageUrl(data))})"; }
 
         private string GetDate(Change data) { return $"**{_localization.Date}**: {data.Date.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss")}"; }
 
-        private string GetRevDiff(Change data) { return $"**{_localization.Modification}**: [{_localization.Consult}]({BuildDiffUrl(data.Title, data.RevId, data.OldRevId)})"; }
+        private string GetRevDiff(Change data) { return $"**{_localization.Modification}**: [{_localization.Consult}]({HandleMultipleDash(BuildDiffUrl(data.Title, data.RevId, data.OldRevId))})"; }
         
         private string GetImageUrl(Change data)
         {
@@ -187,14 +189,39 @@ namespace WikiDiscordNotifier
                 string pageContent = client.DownloadString(GetWikiPageUrl(data));
                 Regex regex = new Regex(@"(fullImageLink).*?(href=)(.*?)(>)");
                 Match match = regex.Match(pageContent);
-                imageUrl = String.Format("{0}/{1}", _wikiUrl, match.Groups[3].Value.Replace("\"", " ").Trim());
+                imageUrl = $"{_domain}/{match.Groups[3].Value.Replace("\"", " ").Trim()}";
             }
             return imageUrl;
         }
 
-        private string GetWikiPageUrl(Change data) { return $"{_wikiUrl}/{data.Title.Replace(' ', '_')}"; }
+        public string GetUserPage(Change data) => $"{_domain}/{_wiki}/User:{data.User.Replace(' ', '_')}";
 
-        private string BuildDiffUrl(string paneName, int diff, int oldid) { return $"{_wikiUrl}/index.php?title={paneName.Replace(' ', '_')}&diff={diff}&oldid={oldid}"; }
+        private string GetWikiPageUrl(Change data) => $"{_domain}/{_wiki}/{data.Title.Replace(' ', '_')}";
+
+        private string BuildDiffUrl(string paneName, int diff, int oldid) => $"{_domain}/{_wiki}/index.php?title={paneName.Replace(' ', '_')}&diff={diff}&oldid={oldid}";
+
+        private string HandleMultipleDash(string url)
+        {
+            // replace multiple dash
+            string result = String.Empty;
+            bool previousWasSlash = false;
+            foreach(var c in url)
+            {
+                if(c == '/' && !previousWasSlash)
+                {
+                    result += c;
+                    previousWasSlash = true;
+                }
+                else if (c != '/')
+                {
+                    previousWasSlash = false;
+                    result += c;
+                }
+            }
+
+            return result.Replace("https:/", "https://").Replace("http:/", "http://");
+        }
+        
     }
 }
    

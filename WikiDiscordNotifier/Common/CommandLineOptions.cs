@@ -9,6 +9,9 @@ namespace WikiDiscordNotifier
             [Option("webhook", Required = true, HelpText = "Webhook url used to post notifications, provided by your discord server.")]
             public string WebHook { get; set; }
 
+            [Option("domain", Required = true, HelpText = "Url of the wiki to monitor. eg: https://mywiki.com/")]
+            public string Domain { get; set; }
+
             [Option("wiki", Required = true, HelpText = "Url of the wiki to monitor. eg: https://mywiki.com/")]
             public string Wiki { get; set; }
 
