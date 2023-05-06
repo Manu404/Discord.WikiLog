@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
-    <AssemblyName>discordwikilog</AssemblyName>
+    <AssemblyName>wikidiscordnotifier</AssemblyName>
     <RootNamespace>DiscordWikiLog</RootNamespace>
   </PropertyGroup>
 
@@ -33,7 +33,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="last_change">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Localization\ar.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
