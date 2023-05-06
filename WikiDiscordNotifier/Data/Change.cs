@@ -5,6 +5,8 @@ namespace WikiDiscordNotifier
 {
     public class Change
     {
+        l18n _localization;
+
         public string User { get; private set; }
         public string Title { get; private set; }
         public string Comment { get; private set; }
@@ -15,7 +17,7 @@ namespace WikiDiscordNotifier
         public int OldRevId { get; private set; }
         public int PageId { get; private set; }
 
-        public Change(JToken data)
+        public Change(JToken data, l18n localization)
         {
             User = data.Value<string>("user");
             Title = data.Value<string>("title");
@@ -26,18 +28,19 @@ namespace WikiDiscordNotifier
             RevId = data.Value<int>("revid");
             OldRevId = data.Value<int>("old_revid");
             PageId = data.Value<int>("pageid");
+            _localization = localization;   
         }
 
         public bool IsNewUser()
         {
             return PageId == 0 && RevId == 0 && OldRevId == 0 && Type == "log"
-                    && string.Equals(Title, string.Format("Utilisateur:{0}", User))
+                    && string.Equals(Title, $"{_localization.User}:{User}")
                     && string.IsNullOrEmpty(Comment);
         }
 
         public bool IsFileUpload()
         {
-            return Title.StartsWith("Fichier:") && Type == "log";
+            return Title.StartsWith($"{_localization.File}:") && Type == "log";
         }
     }
 }

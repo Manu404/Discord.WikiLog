@@ -2,7 +2,7 @@
 
 namespace WikiDiscordNotifier
 {
-    internal class l18n
+    public class l18n
     {
 
         [JsonProperty] public string EditTitle { get; set; }
@@ -17,6 +17,8 @@ namespace WikiDiscordNotifier
         [JsonProperty] public string Date { get; set; }
         [JsonProperty] public string Consult { get; set; }
         [JsonProperty] public string Modification { get; set; }
+        [JsonProperty] public string User { get; set; }
+        [JsonProperty] public string File { get; set; }
 
         [JsonProperty] public string DefaulContentTitle { get; set; }
         [JsonProperty] public string DefaultFooter { get; set; }
@@ -51,6 +53,8 @@ namespace WikiDiscordNotifier
             Modification = "Modification";
             Date = "Date";
             Consult = "Consult";
+            User = "User";
+            File = "File";
 
             DefaulContentTitle = "Description";
             DefaultFooter = "Thanks you for your work !";

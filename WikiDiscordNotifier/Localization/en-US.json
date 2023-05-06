@@ -9,6 +9,8 @@
   "Date": "Date",
   "Consult": "Consult",
   "Modification": "Modification",
+  "User": "User",
+  "File": "File"
   "DefaulContentTitle": "Description",
   "DefaultFooter": "Thanks you for your work !",
   "DefaultFooterLogoUrl": "https://github.com/Manu404/WikiDiscordNotifier/raw/main/icons/heart.png",
