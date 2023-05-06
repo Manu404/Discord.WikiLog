@@ -6,19 +6,34 @@
 
 A free, open source and multiplatform using Discord webhooks to publish message when a change is made in a MediaWiki project. The tool is triggered by cronjob that check periodically if new changes have been made and then post messages into discord channels about those changes.
 
-Basic usage:
+#### Distribution
 
-```
-politilog --wiki https://mywiki.com/wiki/ --webhook <discord_webhook_url> --api https://mywiki.com/w/api.php --language "fr-FR" 
-```
+Two kind of binaries are available:
+
+- *Self-contained*, or "portable": a single file with no other dependencies than scripts and language files.
+
+- *Normal*: a lighter file that requires the DotNet 7 runtime to be installed on the machine.
+
+##### Note
+
+- On Windows, wikiref will be replaced by wikiref.exe
+
+- On Linux a 'chmod +x wikiref' might be required to have it work
+
+#### Basic usage
+
+  ```
+  politilog --domain https://mywiki.com/ --wiki /wiki/ --api /w/api.php --webhook <discord_webhook_url> --language "fr-FR" 
+  ```
 
 #### Parameter reference
 
 |      |            | Flag | Required | Description                                                  |
 | ---- | ---------- | :--: | :------: | ------------------------------------------------------------ |
-|      | --wiki     |      |    ⬤     | The url of the wiki                                          |
-|      | --api      |      |    ⬤     | the url of api.php                                           |
-|      | --webhook  |      |    ⬤     | The url of the discord webhook                               |
+| -d   | --domain   |      |    ⬤     | The domain of the wiki                                       |
+| -w   | --wiki     |      |    ⬤     | The url of the wiki                                          |
+| -a   | --api      |      |    ⬤     | the url of api.php                                           |
+| -h   | --webhook  |      |    ⬤     | The url of the discord webhook                               |
 |      | --language |      |          | Default to english.                                          |
 | -l   | --limit    |      |          | Number of changes requested by queries. Max 500 (MediaWiki api limit). Default is 100. |
 | -n   | --no-log   |  ⬤   |          | Don't output to logfile                                      |
@@ -41,6 +56,10 @@ It can be useful to edit this file manually if you want to regenerate some messa
 #### Scheduling
 
 The best approach to using this tool is to adpapt the script provided in "cron.sh" and program a cronjob that execute the script regularly depending on your server load and preferences.
+
+#### Install .Net 7 Runtime
+
+Is you don't want to use the portable version, go to the [download page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) and download then install the *".NET Desktop Runtime 7"*. You can install the SDK if you want, but you'll end up with more than required to run the tool.
 
 ### Building the tool
 
