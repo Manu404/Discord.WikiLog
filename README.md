@@ -18,7 +18,7 @@ Two kind of binaries are available:
 
 - On Windows, wikiref will be replaced by wikiref.exe
 
-- On Linux a 'chmod +x wikiref' might be required to have it work
+- On Linux a `chmod +x wikiref` might be required to have it work
 
 #### Basic usage
 
